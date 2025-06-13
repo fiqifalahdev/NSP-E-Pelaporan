@@ -1,0 +1,77 @@
+{
+    "menu": [
+        {
+            "menuHeader": "Main Menu",
+            "roles": [
+                "admin",
+                "user",
+                "supervisor",
+                "manager"
+            ]
+        },
+        {
+            "url": "/",
+            "name": "Dashboards",
+            "icon": "menu-icon tf-icons ri-home-smile-line",
+            "slug": "dashboard",
+            "description": "Halaman untuk Data Statistik HSE"
+        },
+        {
+            "url": "/hiradc",
+            "name": "HIRADC",
+            "icon": "menu-icon tf-icons ri-shield-cross-line",
+            "slug": [
+                "hiradc.index",
+                "hiradc.create",
+                "hiradc.edit",
+                "hiradc.show"
+            ],
+            "description": "Laporan HIRADC dan Tindakan Perbaikan"
+        },
+        {
+            "url": "/safety-patrol",
+            "name": "Safety Patrol",
+            "icon": "menu-icon tf-icons ri-survey-line",
+            "slug": [
+                "safety-patrol.index",
+                "safety-patrol.create",
+                "safety-patrol.edit",
+                "safety-patrol.show"
+            ],
+            "description": "Laporan hasil safety patrol"
+        },
+        {
+            "url": "/toolbox-meetings",
+            "name": "Toolbox Meeting",
+            "icon": "menu-icon tf-icons ri-team-line",
+            "slug": [
+                "toolbox-meetings.index",
+                "toolbox-meetings.create",
+                "toolbox-meetings.edit",
+                "toolbox-meetings.show"
+            ],
+            "description": "Laporan hasil toolbox meeting"
+        },
+        {
+            "menuHeader": "Settings",
+            "roles": [
+                "admin"
+            ]
+        },
+        {
+            "url": "/users",
+            "name": "User Management",
+            "icon": "menu-icon tf-icons ri-user-3-line",
+            "slug": [
+                "users.index",
+                "users.create",
+                "users.edit",
+                "users.show"
+            ],
+            "description": "Halaman untuk mengelola data akun user ",
+            "roles": [
+                "admin"
+            ]
+        }
+    ]
+}

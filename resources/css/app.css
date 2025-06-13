@@ -1,0 +1,7 @@
+.pagination .page-item a {
+  border-radius: 50rem;
+}
+
+.pagination-rounded .page-item a {
+  border-radius: 0.25rem !important;
+}
