@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: nsp-e-pelaporan
+    volumes:
+      - .:/var/www
+    depends_on:
+      - mysql
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: hse-jidan
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: inipassword
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  node:
+    image: node:18-alpine
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    command: sh -c "npm install && npm run build"
+
+volumes:
+  dbdata:
+
