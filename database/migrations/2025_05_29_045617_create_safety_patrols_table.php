@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kriteria');
             $table->string('lokasi');
-            $table->enum('temuan', ['Unsafe Action', 'Unsafe Condition']);
+            $table->enum('temuan', ['Safe', 'Unsafe Action', 'Unsafe Condition']);
             $table->date('tanggal');
             $table->enum('kesesuaian', ['Baik', 'Buruk']);
             $table->string('risiko')->nullable();

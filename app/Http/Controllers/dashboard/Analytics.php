@@ -19,10 +19,10 @@ class Analytics extends Controller
 
     // 2. Definisikan kategori risiko
     $kategoriRisiko = [
-      'Rendah' => [1, 3],
-      'Sedang' => [4, 6],
-      'Tinggi' => [7, 9],
-      'Sangat Tinggi' => [10, 15],
+      'Rendah' => [1, 5],
+      'Sedang' => [6, 10],
+      'Tinggi' => [11, 13],
+      'Sangat Tinggi' => [14, 25],
     ];
 
     // 3. Inisialisasi struktur data awal
@@ -42,7 +42,7 @@ class Analytics extends Controller
       foreach (['control_nilai_resiko'] as $tipe) {
         $nilai = $row->{$tipe};
         foreach ($kategoriRisiko as $kategori => [$min, $max]) {
-          if ($nilai >= $min && $nilai <= $max) {
+          if ($nilai > $min && $nilai <= $max) {
             $chartData[$row->identifikasi_lokasi][$kategori]++;
             break;
           }
@@ -73,6 +73,14 @@ class Analytics extends Controller
       ->select('status', DB::raw('count(*) as jumlah'))
       ->groupBy('status')
       ->get();
+
+    // dd([
+    //   'series' => json_encode($series),
+    //   'categories' => json_encode(array_keys($kategoriRisiko)),
+    //   'temuanPerLokasi' => json_encode($jumlahTemuanPerLokasi),
+    //   'temuanPerKategori' => json_encode($jumlahTemuanPerKategori),
+    //   'toolboxStatusSummary' => json_encode($toolboxStatusSummary)
+    // ]);
 
     return view('content.dashboard.dashboards-analytics', [
       'series' => json_encode($series),
