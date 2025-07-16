@@ -29,7 +29,7 @@ class SafetyPatrolController extends Controller
             'tanggal' => 'required|date',
             'kesesuaian' => 'required|in:Baik,Buruk',
             'uraian' => 'nullable|string',
-            'foto_temuan' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // validasi file
+            'foto_temuan' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // validasi file
             'risiko' => 'nullable|string|max:255', // jika ada input risiko
             'tindak_lanjut' => 'nullable|string|max:255', // jika ada input tindak lanjut
         ]);
