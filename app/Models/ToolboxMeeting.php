@@ -16,7 +16,8 @@ class ToolboxMeeting extends Model
         'keterangan',
         'kehadiran',
         'jabatan',
-        'status', // New field added for status
+        'status',
+        'note',
     ];
 
     protected $casts = [

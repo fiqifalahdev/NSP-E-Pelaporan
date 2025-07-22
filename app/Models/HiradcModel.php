@@ -24,5 +24,7 @@ class HiradcModel extends Model
         'recom_poin_kemungkinan',
         'recom_poin_keparahan',
         'recom_nilai_resiko',
+        'status',
+        'note',
     ];
 }

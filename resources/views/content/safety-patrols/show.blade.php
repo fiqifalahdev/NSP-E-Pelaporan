@@ -67,6 +67,13 @@
                         <label for="tindak_lanjut">Tindak Lanjut</label>
                     </div>
 
+                    @if($safetyPatrol->status == 'unverified' && $safetyPatrol->note)
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading fw-bold mb-1">Catatan SPV:</h6>
+                        <p class="mb-0">{{ $safetyPatrol->note }}</p>
+                    </div>
+                    @endif
+
                     @if ($safetyPatrol->foto_temuan)
                         <div class="mb-4">
                             <label class="form-label">Foto Temuan:</label><br>

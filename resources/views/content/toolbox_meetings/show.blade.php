@@ -55,6 +55,14 @@
                             <input type="text" class="form-control mb-2" value="(Tidak ada data kehadiran)" disabled>
                         @endforelse
                     </div>
+
+                    @if($toolboxMeeting->status == 'unverified' && $toolboxMeeting->note)
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading fw-bold mb-1">Catatan SPV:</h6>
+                        <p class="mb-0">{{ $toolboxMeeting->note }}</p>
+                    </div>
+                    @endif
+
                     <a href="{{ route('toolbox-meetings.export-pdf', $toolboxMeeting->id) }}" target="_blank"
                         class="btn btn-danger">
                         Download PDF

@@ -47,6 +47,13 @@
 
                         <hr class="my-4">
 
+                        @if($hiradc['status'] == 'unverified' && $hiradc['note'])
+                        <div class="alert alert-warning">
+                            <h6 class="alert-heading fw-bold mb-1">Catatan SPV:</h6>
+                            <p class="mb-0">{{ $hiradc['note'] }}</p>
+                        </div>
+                        @endif
+
                         <h6>Pengendalian Yang sudah ada</h6>
 
                         <div class="form-floating form-floating-outline mb-4">

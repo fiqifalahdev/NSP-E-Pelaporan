@@ -26,7 +26,18 @@
     <!-- Tabel Data HIRADC -->
     <div class="card">
         <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-header m-0">Daftar HIRADC</h5>
+            <h5 class="card-header m-0">Daftar HIRADC - @if (auth()->user()->role == 'admin')
+                    Admin
+                @elseif(auth()->user()->role == 'user')
+                    HSE
+                @elseif(auth()->user()->role == 'supervisor')
+                    Supervisor
+                @elseif(auth()->user()->role =='manager')
+                    Manager
+                @else
+                    {{ auth()->user()->role }}
+                @endif
+            </h5>
             <a href="{{ route('hiradc.create') }}" class="btn btn-primary me-4">
                 <i class="ri-add-line me-1"></i> Tambah Data
             </a>
@@ -45,6 +56,7 @@
                         <th>Rekomendasi</th>
                         <th>Nilai Risiko Akhir</th>
                         <th>Status</th>
+                        <th>Catatan SPV</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -60,25 +72,25 @@
                             <td>{{ $item->identifikasi_potensi_bahaya }}</td>
                             <td>{{ $item->identifikasi_dampak_bahaya }}</td>
                             <td>{{ $item->identifikasi_PIC }}</td>
-                            @if ($item->control_nilai_resiko < 4)
+                            @if ($item->control_nilai_resiko > 1 && $item->control_nilai_resiko < 5)
                                 <td>
                                     <span class="badge bg-label-success">
                                         Rendah
                                     </span>
                                 </td>
-                            @elseif ($item->control_nilai_resiko >= 4 && $item->control_nilai_resiko < 8)
+                            @elseif ($item->control_nilai_resiko >= 6 && $item->control_nilai_resiko < 10)
                                 <td>
                                     <span class="badge bg-label-warning">
                                         Sedang
                                     </span>
                                 </td>
-                            @elseif ($item->control_nilai_resiko >= 8 && $item->control_nilai_resiko < 12)
+                            @elseif ($item->control_nilai_resiko >= 11 && $item->control_nilai_resiko < 13)
                                 <td>
                                     <span class="badge bg-label-danger">
                                         Tinggi
                                     </span>
                                 </td>
-                            @elseif ($item->control_nilai_resiko >= 12)
+                            @elseif ($item->control_nilai_resiko >= 14 && $item->control_nilai_resiko < 25)
                                 <td>
                                     <span class="badge bg-label-danger">
                                         Sangat Tinggi
@@ -87,25 +99,25 @@
                             @endif
                             {{-- <td>{{ $item->control_nilai_resiko }}</td> --}}
                             <td>{{ $item->recom_uraian }}</td>
-                            @if ($item->recom_nilai_resiko < 4)
+                            @if ($item->recom_nilai_resiko > 1 && $item->recom_nilai_resiko < 5)
                                 <td>
                                     <span class="badge bg-label-success">
                                         Rendah
                                     </span>
                                 </td>
-                            @elseif ($item->recom_nilai_resiko >= 4 && $item->recom_nilai_resiko < 8)
+                            @elseif ($item->recom_nilai_resiko >= 6 && $item->recom_nilai_resiko <= 10)
                                 <td>
                                     <span class="badge bg-label-warning">
                                         Sedang
                                     </span>
                                 </td>
-                            @elseif ($item->recom_nilai_resiko >= 8 && $item->recom_nilai_resiko < 12)
+                            @elseif ($item->recom_nilai_resiko >= 11 && $item->recom_nilai_resiko <= 13)
                                 <td>
                                     <span class="badge bg-label-danger">
                                         Tinggi
                                     </span>
                                 </td>
-                            @elseif ($item->recom_nilai_resiko >= 12)
+                            @elseif ($item->recom_nilai_resiko >= 14 && $item->recom_nilai_resiko <= 25)
                                 <td>
                                     <span class="badge bg-label-danger">
                                         Sangat Tinggi
@@ -126,10 +138,10 @@
                                     <span class="badge bg-label-info me-1">Menunggu Verifikasi</span>
                                 @endif
                             </td>
+                            <td style="width: 300px; word-wrap: break-word;">{{ $item->note }}</td>
+
                             <td class="d-flex gap-1">
-                                @if (
-                                    !in_array($item->status, ['verified', 'unverified']) &&
-                                        in_array(auth()->user()->role, ['admin', 'supervisor', 'manager']))
+                                @if (!in_array($item->status, ['verified', 'unverified']) && in_array(auth()->user()->role, ['supervisor', 'manager']))
                                     <form action="{{ route('hiradc.verify', $item->id) }}" method="post">
                                         @csrf
                                         <button type="submit"
@@ -137,12 +149,41 @@
                                         </button>
                                     </form>
 
+                                    @if(auth()->user()->role == 'supervisor')
                                     <form action="{{ route('hiradc.reject', $item->id) }}" method="post">
                                         @csrf
-                                        <button type="submit"
-                                            class="btn btn-sm btn-warning"onclick="return confirm('Yakin ingin mereject data ini?')">Reject
+                                        <button type="button"
+                                            class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $item->id }}">Reject
                                         </button>
                                     </form>
+                                    @endif
+                                    
+                                    @if(auth()->user()->role == 'supervisor')
+                                    <!-- Reject Modal -->
+                                    <div class="modal fade" id="rejectModal{{ $item->id }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ $item->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="rejectModalLabel{{ $item->id }}">Reject HIRADC</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ route('hiradc.reject', $item->id) }}" method="post">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label for="note" class="form-label">Alasan Reject</label>
+                                                            <textarea class="form-control" id="note" name="note" rows="3" required></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-warning">Reject</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
                                 @endif
 
                                 <a href="{{ route('hiradc.show', $item->id) }}" class="btn btn-sm btn-info">Lihat</a>
@@ -160,9 +201,7 @@
                                 @endif
                             </td>
                         </tr>
-                        @php
-                            $i++;
-                        @endphp
+                        {{-- Removed duplicate increment --}}
                     @endforeach
                     <!-- Tambahkan baris lainnya sesuai kebutuhan -->
                 </tbody>

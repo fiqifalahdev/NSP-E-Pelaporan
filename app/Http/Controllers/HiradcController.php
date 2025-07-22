@@ -109,9 +109,10 @@ class HiradcController extends Controller
         return redirect()->route('hiradc.index')->with('success', 'Data berhasil diverifikasi');
     }
 
-    public function reject(Hiradc $hiradc)
+    public function reject(Request $request, Hiradc $hiradc)
     {
         $hiradc->status = 'unverified';
+        $hiradc->note = $request->input('note');
         $hiradc->save();
 
         return redirect()->route('hiradc.index')->with('success', 'Data berhasil ditolak');

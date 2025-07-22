@@ -34,14 +34,16 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Penanggung Jawab</th>
-                        <th>Jabatan</th>
-                        <th>Keterangan</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Penanggung Jawab</th>
+                            <th>Jabatan</th>
+                            <th>Keterangan</th>
+                            <th>Status</th>
+                            <th>Status Verifikasi</th>
+                            <th>Catatan SPV</th>
+                            <th>Aksi</th>
+                        </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
                     @php $i = 0; @endphp
@@ -59,12 +61,67 @@
                                     <span class="badge bg-label-success">Open</span>
                                 @endif
                             </td>
+                            <td>
+                                @if ($meeting->status == 'verified')
+                                    <span class="badge bg-label-primary me-1">Terverifikasi</span>
+                                @elseif ($meeting->status == 'unverified')
+                                    <span class="badge bg-label-secondary me-1">Verifikasi Ditolak</span>
+                                @elseif ($meeting->status == 'closed')
+                                    <span class="badge bg-label-danger me-1">Closed</span>
+                                @else
+                                    <span class="badge bg-label-success me-1">Open</span>
+                                @endif
+                            </td>
+                            <td style="width: 300px; word-wrap: break-word;">{{ $meeting->note }}</td>
                             <td class="d-flex gap-1">
-                                @if ((auth()->user()->role == 'supervisor' || auth()->user()->role == 'manager' || auth()->user()->role == 'admin' ) && $meeting->status == 'open')
+                                @if (!in_array($meeting->status, ['verified', 'unverified', 'closed']) && in_array(auth()->user()->role, ['supervisor', 'manager']))
+                                    <form action="{{ route('toolbox-meetings.verify', $meeting->id) }}" method="post">
+                                        @csrf
+                                        <button type="submit"
+                                            class="btn btn-sm btn-success" onclick="return confirm('Yakin ingin memverifikasi data ini?')">Verify
+                                        </button>
+                                    </form>
+
+                                    @if(auth()->user()->role == 'supervisor')
+                                    <form action="{{ route('toolbox-meetings.reject', $meeting->id) }}" method="post">
+                                        @csrf
+                                        <button type="button"
+                                            class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#rejectModal{{ $meeting->id }}">Reject
+                                        </button>
+                                    </form>
+                                    
+                                    <!-- Reject Modal -->
+                                    <div class="modal fade" id="rejectModal{{ $meeting->id }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ $meeting->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="rejectModalLabel{{ $meeting->id }}">Reject Toolbox Meeting</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ route('toolbox-meetings.reject', $meeting->id) }}" method="post">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label for="note" class="form-label">Alasan Reject</label>
+                                                            <textarea class="form-control" id="note" name="note" rows="3" required></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-warning">Reject</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                @endif
+
+                                @if ((auth()->user()->role == 'supervisor' || auth()->user()->role == 'manager' ) && $meeting->status == 'open')
                                     <form action="{{ route('toolbox-meetings.changeStatus', $meeting->id) }}" method="POST"
                                         onsubmit="return confirm('Apakah meeting berikut sudah closed?')">
                                         @csrf
-                                        <button type="submit" class="btn btn-sm btn-warning">Update Status</button>
+                                        <button type="submit" class="btn btn-sm btn-danger">Close Meeting</button>
                                     </form>
                                 @endif
 
@@ -86,7 +143,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-muted">Belum ada data Toolbox Meeting.</td>
+                            <td colspan="10" class="text-center text-muted">Belum ada data Toolbox Meeting.</td>
                         </tr>
                     @endforelse
                 </tbody>

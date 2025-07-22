@@ -81,6 +81,23 @@ class ToolboxMeetingController extends Controller
         return redirect()->route('toolbox-meetings.index')->with('success', 'Status laporan berhasil diubah.');
     }
 
+    public function verify(ToolboxMeeting $toolboxMeeting)
+    {
+        $toolboxMeeting->status = 'verified';
+        $toolboxMeeting->save();
+
+        return redirect()->route('toolbox-meetings.index')->with('success', 'Data berhasil diverifikasi');
+    }
+
+    public function reject(Request $request, ToolboxMeeting $toolboxMeeting)
+    {
+        $toolboxMeeting->status = 'unverified';
+        $toolboxMeeting->note = $request->input('note');
+        $toolboxMeeting->save();
+
+        return redirect()->route('toolbox-meetings.index')->with('success', 'Data berhasil ditolak');
+    }
+
     public function exportPDF($id)
     {
         $data = ToolboxMeeting::findOrFail($id);

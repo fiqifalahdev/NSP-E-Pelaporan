@@ -20,5 +20,7 @@ class SafetyPatrol extends Model
         'risiko',
         'tindak_lanjut',
         'foto_temuan',
+        'status',
+        'note',
     ];
 }

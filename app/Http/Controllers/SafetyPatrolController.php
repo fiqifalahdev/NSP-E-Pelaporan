@@ -129,4 +129,21 @@ class SafetyPatrolController extends Controller
 
         return $pdf->stream();
     }
+
+    public function verify(SafetyPatrol $safetyPatrol)
+    {
+        $safetyPatrol->status = 'verified';
+        $safetyPatrol->save();
+
+        return redirect()->route('safety-patrol.index')->with('success', 'Data berhasil diverifikasi');
+    }
+
+    public function reject(Request $request, SafetyPatrol $safetyPatrol)
+    {
+        $safetyPatrol->status = 'unverified';
+        $safetyPatrol->note = $request->input('note');
+        $safetyPatrol->save();
+
+        return redirect()->route('safety-patrol.index')->with('success', 'Data berhasil ditolak');
+    }
 }

@@ -73,10 +73,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('hiradc/{hiradc}/reject', [HiradcController::class, 'reject'])->name('hiradc.reject');
     // Safety Patrol
     Route::prefix('safety-patrol')->resource('safety-patrol', SafetyPatrolController::class);
+    Route::post('safety-patrol/{safetyPatrol}/verify', [SafetyPatrolController::class, 'verify'])->name('safety-patrol.verify');
+    Route::post('safety-patrol/{safetyPatrol}/reject', [SafetyPatrolController::class, 'reject'])->name('safety-patrol.reject');
     // Toolbox Meetings
     Route::prefix('toolbox-meetings')->resource('toolbox-meetings', ToolboxMeetingController::class);
 
     Route::post('toolbox-meetings/{toolboxMeeting}/changeStatus', [ToolboxMeetingController::class, 'changeStatus'])->name('toolbox-meetings.changeStatus');
+    Route::post('toolbox-meetings/{toolboxMeeting}/verify', [ToolboxMeetingController::class, 'verify'])->name('toolbox-meetings.verify');
+    Route::post('toolbox-meetings/{toolboxMeeting}/reject', [ToolboxMeetingController::class, 'reject'])->name('toolbox-meetings.reject');
 
 
     Route::get('/safety-patrol/{id}/export-pdf', [SafetyPatrolController::class, 'exportPDF'])->name('safety-patrol.export-pdf');

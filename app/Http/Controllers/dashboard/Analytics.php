@@ -38,11 +38,12 @@ class Analytics extends Controller
       ->select('identifikasi_lokasi', 'control_nilai_resiko')
       ->get();
 
+
     foreach ($allData as $row) {
       foreach (['control_nilai_resiko'] as $tipe) {
         $nilai = $row->{$tipe};
         foreach ($kategoriRisiko as $kategori => [$min, $max]) {
-          if ($nilai > $min && $nilai <= $max) {
+          if ($nilai >= $min && $nilai <= $max) {
             $chartData[$row->identifikasi_lokasi][$kategori]++;
             break;
           }
