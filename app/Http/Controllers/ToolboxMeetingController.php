@@ -10,7 +10,7 @@ class ToolboxMeetingController extends Controller
 {
     public function index()
     {
-        $meetings = ToolboxMeeting::latest()->paginate(10);
+        $meetings = ToolboxMeeting::orderBy('created_at', 'desc')->paginate(10);
         return view('content.toolbox_meetings.index', compact('meetings'));
     }
 

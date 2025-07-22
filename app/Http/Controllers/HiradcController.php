@@ -10,10 +10,8 @@ class HiradcController extends Controller
 {
     public function index()
     {
-        $hiradcs = Hiradc::all();
-
-        // Tambah Paginasi
-        $hiradcs = Hiradc::paginate(10); // Mengambil 10 data per halaman
+        // Tambah Paginasi dengan sorting descending berdasarkan created_at
+        $hiradcs = Hiradc::orderBy('created_at', 'desc')->paginate(10); // Mengambil 10 data per halaman
 
         return view('content.hiradc.index', compact('hiradcs'));
     }
