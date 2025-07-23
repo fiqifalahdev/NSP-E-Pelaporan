@@ -51,7 +51,7 @@
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="role" id="role_user" value="user"
                                     {{ old('role') == 'user' ? 'checked' : '' }}>
-                                <label class="form-check-label" for="role_user">User</label>
+                                <label class="form-check-label" for="role_user">Safetyman</label>
                             </div>
                         </div>
 

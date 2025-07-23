@@ -40,7 +40,6 @@
                             <th>Jabatan</th>
                             <th>Keterangan</th>
                             <th>Status</th>
-                            <th>Status Verifikasi</th>
                             <th>Catatan SPV</th>
                             <th>Aksi</th>
                         </tr>
@@ -61,26 +60,15 @@
                                     <span class="badge bg-label-success">Open</span>
                                 @endif
                             </td>
-                            <td>
-                                @if ($meeting->status == 'verified')
-                                    <span class="badge bg-label-primary me-1">Terverifikasi</span>
-                                @elseif ($meeting->status == 'unverified')
-                                    <span class="badge bg-label-secondary me-1">Verifikasi Ditolak</span>
-                                @elseif ($meeting->status == 'closed')
-                                    <span class="badge bg-label-danger me-1">Closed</span>
-                                @else
-                                    <span class="badge bg-label-success me-1">Open</span>
-                                @endif
-                            </td>
                             <td style="width: 300px; word-wrap: break-word;">{{ $meeting->note }}</td>
                             <td class="d-flex gap-1">
                                 @if (!in_array($meeting->status, ['verified', 'unverified', 'closed']) && in_array(auth()->user()->role, ['supervisor', 'manager']))
-                                    <form action="{{ route('toolbox-meetings.verify', $meeting->id) }}" method="post">
+                                    {{-- <form action="{{ route('toolbox-meetings.verify', $meeting->id) }}" method="post">
                                         @csrf
                                         <button type="submit"
                                             class="btn btn-sm btn-success" onclick="return confirm('Yakin ingin memverifikasi data ini?')">Verify
                                         </button>
-                                    </form>
+                                    </form> --}}
 
                                     @if(auth()->user()->role == 'supervisor')
                                     <form action="{{ route('toolbox-meetings.reject', $meeting->id) }}" method="post">
@@ -121,7 +109,7 @@
                                     <form action="{{ route('toolbox-meetings.changeStatus', $meeting->id) }}" method="POST"
                                         onsubmit="return confirm('Apakah meeting berikut sudah closed?')">
                                         @csrf
-                                        <button type="submit" class="btn btn-sm btn-danger">Close Meeting</button>
+                                        <button type="submit" class="btn btn-sm btn-danger">Closed</button>
                                     </form>
                                 @endif
 

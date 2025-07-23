@@ -55,7 +55,7 @@
                                 @if ($item->role == 'admin')
                                     <span class="badge bg-label-primary me-1">Admin</span>
                                 @elseif ($item->role == 'user')
-                                    <span class="badge bg-label-secondary me-1">User</span>
+                                    <span class="badge bg-label-secondary me-1">Safetyman</span>
                                 @elseif ($item->role == 'supervisor')
                                     <span class="badge bg-label-success me-1">Supervisor</span>
                                 @elseif ($item->role == 'manager')
