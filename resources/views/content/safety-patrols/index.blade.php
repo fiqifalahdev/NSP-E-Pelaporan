@@ -26,20 +26,22 @@
     <div class="card">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-header m-0">Data Safety Patrol</h5>
-            <a href="{{ route('safety-patrol.create') }}" class="btn btn-primary me-4">
-                <i class="ri-add-line me-1"></i> Tambah Data
-            </a>
+            @if(auth()->user()->role == 'user' || auth()->user()->role == 'admin')
+                <a href="{{ route('safety-patrol.create') }}" class="btn btn-primary me-4">
+                    <i class="ri-add-line me-1"></i> Tambah Data
+                </a>
+            @endif
         </div>
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Inspector</th>
+                        <th>Klasifikasi Temuan</th>
                         <th>Kriteria</th>
                         <th>Lokasi</th>
-                        <th>Temuan</th>
                         <th>Tanggal</th>
-                        <th>Kesesuaian</th>
                         <th>Status</th>
                         <th>Catatan SPV</th>
                         <th>Aksi</th>
@@ -49,20 +51,11 @@
                     @forelse ($safetyPatrols as $i => $item)
                         <tr>
                             <td>{{ $i + 1 }}</td>
-                            <td>{{ $item->kriteria }}</td>
+                            <td>{{ $item->inspector ?? '-' }}</td>
+                            <td>{{ $item->klasifikasi_temuan ?? '-' }}</td>
+                            <td>{{ $item->kriteria ?? '-' }}</td>
                             <td>{{ $item->lokasi }}</td>
-                            <td>
-                                <span
-                                    class="badge bg-label-{{ $item->temuan === 'Unsafe Action' ? 'warning' : ($item->temuan === 'Safe' ? 'success' : 'danger') }}">
-                                    {{ $item->temuan }}
-                                </span>
-                            </td>
                             <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
-                            <td>
-                                <span class="badge bg-label-{{ $item->kesesuaian === 'Baik' ? 'success' : 'danger' }}">
-                                    {{ $item->kesesuaian }}
-                                </span>
-                            </td>
                             <td>
                                 <span class="badge bg-label-{{ $item->status == 'verified' ? 'primary' : ($item->status == 'unverified' ? 'secondary' : 'info') }} me-1">
                                     {{ $item->status == 'verified' ? 'Terverifikasi' : ($item->status == 'unverified' ? 'Verifikasi Ditolak' : 'Menunggu Verifikasi') }}
@@ -70,7 +63,8 @@
                             </td>
                             <td style="width: 300px; word-wrap: break-word;">{{ $item->note }}</td>
                             <td class="d-flex gap-1">
-                                @if (!in_array($item->status, ['verified', 'unverified']) && in_array(auth()->user()->role, ['supervisor', 'manager']))
+                                {{-- Supervisor: bisa validasi dan reject --}}
+                                @if (!in_array($item->status, ['verified', 'unverified']) && auth()->user()->role == 'supervisor')
                                     <form action="{{ route('safety-patrol.verify', $item->id) }}" method="post">
                                         @csrf
                                         <button type="submit"
@@ -78,7 +72,6 @@
                                         </button>
                                     </form>
 
-                                    @if(auth()->user()->role == 'supervisor')
                                     <form action="{{ route('safety-patrol.reject', $item->id) }}" method="post">
                                         @csrf
                                         <button type="button"
@@ -110,13 +103,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @endif
                                 @endif
 
+                                {{-- Semua role bisa lihat --}}
                                 <a href="{{ route('safety-patrol.show', $item->id) }}"
                                     class="btn btn-sm btn-info">Lihat</a>
 
-                                @if (auth()->user()->role == 'supervisor' || auth()->user()->role == 'manager' || auth()->user()->role == 'admin')
+                                {{-- Admin dan Manager: akses penuh --}}
+                                @if (in_array(auth()->user()->role, ['admin', 'manager']))
                                     <a href="{{ route('safety-patrol.edit', $item->id) }}"
                                         class="btn btn-sm btn-secondary">Edit</a>
                                     <form action="{{ route('safety-patrol.destroy', $item->id) }}" method="POST"

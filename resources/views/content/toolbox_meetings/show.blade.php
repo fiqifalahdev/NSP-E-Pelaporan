@@ -63,10 +63,13 @@
                     </div>
                     @endif
 
-                    <a href="{{ route('toolbox-meetings.export-pdf', $toolboxMeeting->id) }}" target="_blank"
-                        class="btn btn-danger">
-                        Download PDF
-                    </a>
+                    {{-- Role-based PDF download access --}}
+                    @if(auth()->user()->role === 'supervisor')
+                        <a href="{{ route('toolbox-meetings.export-pdf', $toolboxMeeting->id) }}" target="_blank"
+                            class="btn btn-danger">
+                            Download PDF
+                        </a>
+                    @endif
                     <a href="{{ route('toolbox-meetings.index') }}" class="btn btn-secondary">Kembali</a>
                 </div>
             </div>

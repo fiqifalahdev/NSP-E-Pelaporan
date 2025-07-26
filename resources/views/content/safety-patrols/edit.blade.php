@@ -36,66 +36,42 @@
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        
                         <div class="form-floating form-floating-outline mb-4">
-                            <select class="form-select" id="kriteria" name="kriteria">
-                                <option
-                                    value="APD"{{ old('kriteria', $safetyPatrol->kriteria ?? '') == 'APD' ? 'selected' : '' }}>
-                                    APD</option>
-                                <option
-                                    value="Rambu Keselamatan"{{ old('kriteria', $safetyPatrol->kriteria ?? '') == 'Rambu Keselamatan' ? 'selected' : '' }}>
-                                    Rambu Keselamatan</option>
-                                <option
-                                    value="Perilaku Pekerja"{{ old('kriteria', $safetyPatrol->kriteria ?? '') == 'Perilaku Pekerja' ? 'selected' : '' }}>
-                                    Perilaku Pekerja</option>
-                                <option
-                                    value="Pengoperasian Alat"{{ old('kriteria', $safetyPatrol->kriteria ?? '') == 'Pengoperasian Alat' ? 'selected' : '' }}>
-                                    Pengoperasian Alat</option>
-                                <option
-                                    value="Pelaksanaan Pekerjaan"{{ old('kriteria', $safetyPatrol->kriteria ?? '') == 'Pelaksanaan Pekerjaan' ? 'selected' : '' }}>
-                                    Pelaksanaan Pekerjaan</option>
-                            </select>
-                            <label for="kriteria">Kriteria</label>
+                            <input type="text" id="inspector" class="form-control" name="inspector" 
+                                placeholder="Inspector" value="{{ old('inspector', $safetyPatrol->inspector ?? '') }}">
+                            <label for="inspector">Inspector</label>
                         </div>
 
                         <div class="form-floating form-floating-outline mb-4">
-                            <select class="form-select  @error('lokasi') is-invalid @enderror" id="lokasi"
-                                name="lokasi">
-                                <option value="">Pilih Lokasi</option>
-                                <option value="Halaman Parkir"
-                                    {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Halaman Parkir' ? 'selected' : '' }}>
-                                    Halaman Parkir</option>
-                                <option value="Office"
-                                    {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Office' ? 'selected' : '' }}>
-                                    Office</option>
-                                <option value="Warehouse"
-                                    {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Warehouse' ? 'selected' : '' }}>
-                                    Warehouse</option>
-                                <option value="Fabrikasi"
-                                    {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Fabrikasi' ? 'selected' : '' }}>
-                                    Fabrikasi</option>
-                                <option value="Mess"
-                                    {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Mess' ? 'selected' : '' }}>
-                                    Mess</option>
+                            <select class="form-select" id="klasifikasi_temuan" name="klasifikasi_temuan">
+                                <option value="">Pilih Klasifikasi</option>
+                                <option value="Unsafe Action" {{ old('klasifikasi_temuan', $safetyPatrol->klasifikasi_temuan ?? '') == 'Unsafe Action' ? 'selected' : '' }}>Unsafe Action</option>
+                                <option value="Unsafe Condition" {{ old('klasifikasi_temuan', $safetyPatrol->klasifikasi_temuan ?? '') == 'Unsafe Condition' ? 'selected' : '' }}>Unsafe Condition</option>
+                                <option value="Safe" {{ old('klasifikasi_temuan', $safetyPatrol->klasifikasi_temuan ?? '') == 'Safe' ? 'selected' : '' }}>Safe</option>
                             </select>
-                            <label for="identifikasi_lokasi">Lokasi</label>
-                            @error('identifikasi_lokasi')
+                            <label for="klasifikasi_temuan">Klasifikasi Temuan</label>
+                        </div>
+
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input type="text" id="kriteria" class="form-control" name="kriteria" 
+                                placeholder="Temuan" value="{{ old('kriteria', $safetyPatrol->kriteria ?? '') }}">
+                            <label for="kriteria">Temuan</label>
+                        </div>
+
+                        <div class="form-floating form-floating-outline mb-4">
+                            <select class="form-select @error('lokasi') is-invalid @enderror" id="lokasi" name="lokasi">
+                                <option value="">Pilih Lokasi</option>
+                                <option value="Halaman Parkir" {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Halaman Parkir' ? 'selected' : '' }}>Halaman Parkir</option>
+                                <option value="Office" {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Office' ? 'selected' : '' }}>Office</option>
+                                <option value="Warehouse" {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Warehouse' ? 'selected' : '' }}>Warehouse</option>
+                                <option value="Fabrikasi" {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Fabrikasi' ? 'selected' : '' }}>Fabrikasi</option>
+                                <option value="Mess" {{ old('lokasi', $safetyPatrol->lokasi ?? '') == 'Mess' ? 'selected' : '' }}>Mess</option>
+                            </select>
+                            <label for="lokasi">Lokasi</label>
+                            @error('lokasi')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                        </div>
-
-                        <div class="form-floating form-floating-outline mb-4">
-                            <select name="temuan" class="form-select">
-                                <option value="Safe"
-                                    {{ old('temuan', $safetyPatrol->temuan ?? '') == 'Safe' ? 'selected' : '' }}>
-                                    Safe</option>
-                                <option value="Unsafe Action"
-                                    {{ old('temuan', $safetyPatrol->temuan ?? '') == 'Unsafe Action' ? 'selected' : '' }}>
-                                    Unsafe Action</option>
-                                <option value="Unsafe Condition"
-                                    {{ old('temuan', $safetyPatrol->temuan ?? '') == 'Unsafe Condition' ? 'selected' : '' }}>
-                                    Unsafe Condition</option>
-                            </select>
-                            <label for="temuan">Temuan (S/UA/UC)</label>
                         </div>
 
                         <div class="form-floating form-floating-outline mb-4">
@@ -105,43 +81,39 @@
                         </div>
 
                         <div class="form-floating form-floating-outline mb-4">
-                            <select class="form-select" id="kesesuaian" name="kesesuaian">
-                                <option value="Baik"
-                                    {{ old('kesesuaian', $safetyPatrol->kesesuaian ?? '') == 'Baik' ? 'selected' : '' }}>
-                                    Baik
-                                </option>
-                                <option value="Buruk"
-                                    {{ old('kesesuaian', $safetyPatrol->kesesuaian ?? '') == 'Buruk' ? 'selected' : '' }}>
-                                    Buruk
-                                </option>
-                            </select>
-                            <label for="kesesuaian">Kesesuaian</label>
-                        </div>
-
-                        <div class="form-floating form-floating-outline mb-4">
-                            <input type="text" id="risiko" class="form-control" name="risiko" placeholder="Risiko"
-                                value="{{ old('risiko', $safetyPatrol->risiko) }}">
+                            <input type="text" id="risiko" class="form-control" name="risiko" 
+                                placeholder="Risiko" value="{{ old('risiko', $safetyPatrol->risiko ?? '') }}">
                             <label for="risiko">Risiko</label>
-                        </div>
-
-                        <div class="form-floating form-floating-outline mb-4">
-                            <input type="text" id="tindak_lanjut" class="form-control" name="tindak_lanjut"
-                                placeholder="Tindak Lanjut"
-                                value="{{ old('tindak_lanjut', $safetyPatrol->tindak_lanjut) }}">
-                            <label for="tindak_lanjut">Tindak Lanjut</label>
                         </div>
 
                         @if ($safetyPatrol->foto_temuan)
                             <div class="mb-4">
-                                <label class="form-label">Foto Temuan:</label><br>
+                                <label class="form-label">Foto Temuan Saat Ini:</label><br>
                                 <img src="{{ asset('storage/foto_temuan/' . $safetyPatrol->foto_temuan) }}"
                                     alt="Foto Temuan" class="img-fluid rounded border" style="max-width: 400px;">
                             </div>
                         @endif
                         <div class="mb-4">
-                            <label for="foto_temuan" class="form-label">Ganti Foto Temuan (Opsional)</label>
-                            <input class="form-control" type="file" id="foto_temuan" name="foto_temuan"
-                                accept="image/*">
+                            <label for="foto_temuan" class="form-label">Upload Foto Temuan</label>
+                            <input class="form-control" type="file" id="foto_temuan" name="foto_temuan" accept="image/*">
+                        </div>
+
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input type="text" id="tindak_lanjut" class="form-control" name="tindak_lanjut"
+                                placeholder="Tindak Lanjut" value="{{ old('tindak_lanjut', $safetyPatrol->tindak_lanjut ?? '') }}">
+                            <label for="tindak_lanjut">Tindak Lanjut</label>
+                        </div>
+
+                        @if ($safetyPatrol->foto_tindak_lanjut ?? false)
+                            <div class="mb-4">
+                                <label class="form-label">Foto Tindak Lanjut Saat Ini:</label><br>
+                                <img src="{{ asset('storage/foto_tindak_lanjut/' . $safetyPatrol->foto_tindak_lanjut) }}"
+                                    alt="Foto Tindak Lanjut" class="img-fluid rounded border" style="max-width: 400px;">
+                            </div>
+                        @endif
+                        <div class="mb-4">
+                            <label for="foto_tindak_lanjut" class="form-label">Upload Foto Tindak Lanjut</label>
+                            <input class="form-control" type="file" id="foto_tindak_lanjut" name="foto_tindak_lanjut" accept="image/*">
                         </div>
 
                         <button type="submit" class="btn btn-primary">Kirim Laporan</button>

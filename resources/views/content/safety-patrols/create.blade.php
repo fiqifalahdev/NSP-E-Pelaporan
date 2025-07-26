@@ -30,14 +30,25 @@
                         @csrf
 
                         <div class="form-floating form-floating-outline mb-4">
-                            <select class="form-select" id="kriteria" name="kriteria">
-                                <option value="APD">APD</option>
-                                <option value="Rambu Keselamatan">Rambu Keselamatan</option>
-                                <option value="Perilaku Pekerja">Perilaku Pekerja</option>
-                                <option value="Pengoperasian Alat">Pengoperasian Alat</option>
-                                <option value="Pelaksanaan Pekerjaan">Pelaksanaan Pekerjaan</option>
+                            <input type="text" id="inspector" class="form-control" name="inspector" 
+                                placeholder="Inspector" value="{{ old('inspector') }}">
+                            <label for="inspector">Inspector</label>
+                        </div>
+
+                        <div class="form-floating form-floating-outline mb-4">
+                            <select class="form-select" id="klasifikasi_temuan" name="klasifikasi_temuan">
+                                <option value="">Pilih Klasifikasi</option>
+                                <option value="Unsafe Action">Unsafe Action</option>
+                                <option value="Unsafe Condition">Unsafe Condition</option>
+                                <option value="Safe">Safe</option>
                             </select>
-                            <label for="kriteria">Kriteria</label>
+                            <label for="klasifikasi_temuan">Klasifikasi Temuan</label>
+                        </div>
+
+                        <div class="form-floating form-floating-outline mb-4">
+                            <input type="text" id="kriteria" class="form-control" name="kriteria" 
+                                placeholder="Temuan" value="{{ old('kriteria') }}">
+                            <label for="temuan">Temuan</label>
                         </div>
 
                         <div class="form-floating form-floating-outline mb-4">
@@ -53,32 +64,20 @@
                         </div>
 
                         <div class="form-floating form-floating-outline mb-4">
-                            <select class="form-select" id="temuan" name="temuan">
-                                <option value="Safe">Safe</option>
-                                <option value="Unsafe Action">Unsafe Action</option>
-                                <option value="Unsafe Condition">Unsafe Condition</option>
-                            </select>
-                            <label for="temuan">Temuan (S/UA/UC)</label>
-                        </div>
-
-                        <div class="form-floating form-floating-outline mb-4">
                             <input type="date" id="tanggal" class="form-control" name="tanggal"
                                 value="{{ old('tanggal') }}">
                             <label for="tanggal">Tanggal Pemeriksaan</label>
                         </div>
 
                         <div class="form-floating form-floating-outline mb-4">
-                            <select class="form-select" id="kesesuaian" name="kesesuaian">
-                                <option value="Baik">Baik</option>
-                                <option value="Buruk">Buruk</option>
-                            </select>
-                            <label for="kesesuaian">Kesesuaian</label>
-                        </div>
-
-                        <div class="form-floating form-floating-outline mb-4">
                             <input type="text" id="risiko" class="form-control" name="risiko" placeholder="Risiko"
                                 value="{{ old('risiko') }}">
                             <label for="risiko">Risiko</label>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="foto_temuan" class="form-label">Upload Foto Temuan</label>
+                            <input class="form-control" type="file" id="foto_temuan" name="foto_temuan" accept="image/*">
                         </div>
 
                         <div class="form-floating form-floating-outline mb-4">
@@ -88,8 +87,8 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="foto_temuan" class="form-label">Upload Foto Temuan</label>
-                            <input class="form-control" type="file" id="foto_temuan" name="foto_temuan" accept="image/*">
+                            <label for="foto_tindak_lanjut" class="form-label">Upload Foto Tindak Lanjut</label>
+                            <input class="form-control" type="file" id="foto_tindak_lanjut" name="foto_tindak_lanjut" accept="image/*">
                         </div>
 
                         <button type="submit" class="btn btn-primary">Kirim Laporan</button>

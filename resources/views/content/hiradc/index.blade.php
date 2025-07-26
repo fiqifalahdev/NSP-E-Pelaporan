@@ -38,9 +38,11 @@
                     {{ auth()->user()->role }}
                 @endif
             </h5>
+            @if(auth()->user()->role === 'user' || auth()->user()->role === 'admin')
             <a href="{{ route('hiradc.create') }}" class="btn btn-primary me-4">
                 <i class="ri-add-line me-1"></i> Tambah Data
             </a>
+            @endif
         </div>
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
@@ -186,14 +188,13 @@
                                     @endif
                                 @endif
 
+                                {{-- All roles can view --}}
                                 <a href="{{ route('hiradc.show', $item->id) }}" class="btn btn-sm btn-info">Lihat</a>
 
-                                @if (auth()->user()->role == 'supervisor' || auth()->user()->role == 'manager' || auth()->user()->role == 'admin')
-                                    {{-- Tombol Edit dan Hapus hanya untuk Supervisor, Manager, dan Admin --}}
-                                    <a href="{{ route('hiradc.edit', $item->id) }}"
-                                        class="btn btn-sm btn-secondary">Edit</a>
-                                    <form action="{{ route('hiradc.destroy', $item->id) }}" method="POST"
-                                        onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                {{-- Admin and Manager have full access --}}
+                                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
+                                    <a href="{{ route('hiradc.edit', $item->id) }}" class="btn btn-sm btn-secondary">Edit</a>
+                                    <form action="{{ route('hiradc.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">Hapus</button>

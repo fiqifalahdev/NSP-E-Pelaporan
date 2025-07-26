@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SafetyPatrol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class SafetyPatrolController extends Controller
@@ -23,33 +24,39 @@ class SafetyPatrolController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kriteria' => 'required|string|max:255',
+            'inspector' => 'nullable|string|max:255',
+            'klasifikasi_temuan' => 'nullable|string|max:255',
+            'kriteria' => 'nullable|string|max:255',
             'lokasi' => 'required|string|max:255',
-            'temuan' => 'required|in:Safe,Unsafe Action,Unsafe Condition',
-            'tanggal' => 'required|date',
-            'kesesuaian' => 'required|in:Baik,Buruk',
-            'uraian' => 'nullable|string',
-            'foto_temuan' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // validasi file
             'risiko' => 'nullable|string|max:255', // jika ada input risiko
-            'tindak_lanjut' => 'nullable|string|max:255', // jika ada input tindak lanjut
+            'tanggal' => 'required|date',
+            'tindak_lanjut' => 'nullable|string|max:255',
+            'foto_temuan' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'foto_tindak_lanjut' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
         $data = $request->only([
+            'inspector',
+            'klasifikasi_temuan',
             'kriteria',
             'lokasi',
-            'temuan',
             'tanggal',
-            'kesesuaian',
-            'uraian',
-            'risiko',
             'tindak_lanjut',
+            'risiko',
         ]);
 
         if ($request->hasFile('foto_temuan')) {
             $file = $request->file('foto_temuan');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/foto_temuan', $filename); // simpan ke storage/app/public/foto_temuan
+            $file->storeAs('public/foto_temuan', $filename);
             $data['foto_temuan'] = $filename;
+        }
+
+        if ($request->hasFile('foto_tindak_lanjut')) {
+            $file = $request->file('foto_tindak_lanjut');
+            $filename = time() . '_tindak_lanjut_' . $file->getClientOriginalName();
+            $file->storeAs('public/foto_tindak_lanjut', $filename);
+            $data['foto_tindak_lanjut'] = $filename;
         }
 
         SafetyPatrol::create($data);
@@ -72,24 +79,25 @@ class SafetyPatrolController extends Controller
     {
         try {
             $request->validate([
-                'kriteria' => 'required|string|max:255',
+                'inspector' => 'nullable|string|max:255',
+                'klasifikasi_temuan' => 'nullable|string|max:255',
+                'kriteria' => 'nullable|string|max:255',
                 'lokasi' => 'required|string|max:255',
-                'temuan' => 'required|in:Safe,Unsafe Action,Unsafe Condition',
+                'risiko' => 'nullable|string|max:255', // jika ada input risiko
                 'tanggal' => 'required|date',
-                'kesesuaian' => 'required|in:Baik,Buruk',
-                'uraian' => 'nullable|string',
-                'foto_temuan' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // validasi file
+                'tindak_lanjut' => 'nullable|string|max:255',
+                'foto_temuan' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+                'foto_tindak_lanjut' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
             ]);
 
             $data = $request->only([
+                'inspector',
+                'klasifikasi_temuan',
                 'kriteria',
                 'lokasi',
-                'temuan',
                 'tanggal',
-                'kesesuaian',
-                'uraian',
+                'tindak_lanjut',
                 'risiko',
-                'tindak_lanjut'
             ]);
 
             if ($request->hasFile('foto_temuan')) {
@@ -102,6 +110,18 @@ class SafetyPatrolController extends Controller
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $file->storeAs('public/foto_temuan', $filename);
                 $data['foto_temuan'] = $filename;
+            }
+
+            if ($request->hasFile('foto_tindak_lanjut')) {
+                // Hapus file lama jika ada
+                if ($safetyPatrol->foto_tindak_lanjut && Storage::exists('public/foto_tindak_lanjut/' . $safetyPatrol->foto_tindak_lanjut)) {
+                    Storage::delete('public/foto_tindak_lanjut/' . $safetyPatrol->foto_tindak_lanjut);
+                }
+
+                $file = $request->file('foto_tindak_lanjut');
+                $filename = time() . '_tindak_lanjut_' . $file->getClientOriginalName();
+                $file->storeAs('public/foto_tindak_lanjut', $filename);
+                $data['foto_tindak_lanjut'] = $filename;
             }
 
             $safetyPatrol->update($data);

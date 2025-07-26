@@ -138,9 +138,12 @@
                             <label for="recom_nilai_resiko">Nilai Risiko</label>
                         </div>
 
-                        <a href="{{ route('hiradc.export-pdf', $hiradc->id) }}" target="_blank" class="btn btn-danger">
-                            Download PDF
-                        </a>
+                        {{-- Role-based PDF download access --}}
+                        @if(auth()->user()->role === 'supervisor')
+                            <a href="{{ route('hiradc.export-pdf', $hiradc->id) }}" target="_blank" class="btn btn-danger">
+                                Download PDF
+                            </a>
+                        @endif
                         <a href="{{ route('hiradc.index') }}" class="btn btn-secondary">Kembali</a>
                     </form>
                 </div>

@@ -12,14 +12,16 @@ class SafetyPatrol extends Model
     protected $table = 'safety_patrols';
 
     protected $fillable = [
+        'inspector',
+        'klasifikasi_temuan',
         'kriteria',
         'lokasi',
-        'temuan',
         'tanggal',
         'kesesuaian',
         'risiko',
         'tindak_lanjut',
         'foto_temuan',
+        'foto_tindak_lanjut',
         'status',
         'note',
     ];

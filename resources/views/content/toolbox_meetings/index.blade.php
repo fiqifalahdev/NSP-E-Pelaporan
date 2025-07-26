@@ -26,9 +26,11 @@
     <div class="card">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-header m-0">Daftar Toolbox Meeting</h5>
-            <a href="{{ route('toolbox-meetings.create') }}" class="btn btn-primary me-4">
-                <i class="ri-add-line me-1"></i> Tambah Data
-            </a>
+            @if(auth()->user()->role === 'user' || auth()->user()->role === 'admin')
+                <a href="{{ route('toolbox-meetings.create') }}" class="btn btn-primary me-4">
+                    <i class="ri-add-line me-1"></i> Tambah Data
+                </a>
+            @endif
         </div>
         <div class="table-responsive text-nowrap">
             <table class="table table-hover">
@@ -62,6 +64,7 @@
                             </td>
                             <td style="width: 300px; word-wrap: break-word;">{{ $meeting->note }}</td>
                             <td class="d-flex gap-1">
+                                {{-- Supervisor can verify and reject --}}
                                 @if (!in_array($meeting->status, ['verified', 'unverified', 'closed']) && in_array(auth()->user()->role, ['supervisor', 'manager']))
                                     {{-- <form action="{{ route('toolbox-meetings.verify', $meeting->id) }}" method="post">
                                         @csrf
@@ -113,10 +116,11 @@
                                     </form>
                                 @endif
 
-                                <a href="{{ route('toolbox-meetings.show', $meeting->id) }}"
-                                    class="btn btn-sm btn-info">Lihat</a>
+                                {{-- All roles can view --}}
+                                <a href="{{ route('toolbox-meetings.show', $meeting->id) }}" class="btn btn-sm btn-info">Lihat</a>
 
-                                @if (auth()->user()->role == 'supervisor' || auth()->user()->role == 'manager' || auth()->user()->role == 'admin')
+                                {{-- Admin and Manager have full access --}}
+                                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'manager')
                                     <a href="{{ route('toolbox-meetings.edit', $meeting->id) }}"
                                         class="btn btn-sm btn-secondary">Edit</a>
 

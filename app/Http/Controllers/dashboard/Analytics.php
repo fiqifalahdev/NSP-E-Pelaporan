@@ -66,22 +66,14 @@ class Analytics extends Controller
       ->get();
 
     $jumlahTemuanPerKategori = DB::table('safety_patrols')
-      ->select('temuan', DB::raw('COUNT(*) as jumlah_temuan'))
-      ->groupBy('temuan')
+      ->select('klasifikasi_temuan', DB::raw('COUNT(*) as jumlah_temuan'))
+      ->groupBy('klasifikasi_temuan')
       ->get();
 
     $toolboxStatusSummary = DB::table('toolbox_meetings')
       ->select('status', DB::raw('count(*) as jumlah'))
       ->groupBy('status')
       ->get();
-
-    // dd([
-    //   'series' => json_encode($series),
-    //   'categories' => json_encode(array_keys($kategoriRisiko)),
-    //   'temuanPerLokasi' => json_encode($jumlahTemuanPerLokasi),
-    //   'temuanPerKategori' => json_encode($jumlahTemuanPerKategori),
-    //   'toolboxStatusSummary' => json_encode($toolboxStatusSummary)
-    // ]);
 
     return view('content.dashboard.dashboards-analytics', [
       'series' => json_encode($series),
